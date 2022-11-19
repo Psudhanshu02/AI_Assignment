@@ -1,0 +1,35 @@
+start :- x(Disease), write('the verdict is : '), write(Disease),nl, undo.
+
+
+x(symptoms)   :- symptoms,!.
+x(withoutsymptoms).  
+
+symptoms :- verify(sneezing),
+            verify(sore_throat),            
+            verify(mild_headache),
+            verify(body_temperature_above_99F).
+ask(Question) :-
+    write('Do you have '),
+    write(Question),
+    write('? '),
+    read(Response),
+    nl,
+    ( (Response == yes ; Response == yes)
+      ->
+       assert(yes(Question)) ;
+       assert(no(Question)), fail).
+
+:- dynamic yes/1,no/1.
+
+verify(S) :-
+   (yes(S)
+    ->
+    true ;
+    (no(S)
+     ->
+     fail ;
+     ask(S))).
+
+undo :- retract(yes(_)),fail.
+undo :- retract(no(_)),fail.
+undo.
